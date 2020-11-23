@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mooc.mooc.mapper.RankInfoMapper">
+  <resultMap id="BaseResultMap" type="com.mooc.mooc.model.RankInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="rankid" jdbcType="INTEGER" property="rankid" />
+    <result column="rankname" jdbcType="VARCHAR" property="rankname" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="appname" jdbcType="VARCHAR" property="appname" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from rank_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mooc.mooc.model.RankInfo">
+    insert into rank_info (id, rankid, rankname, 
+      updateTime, appname)
+    values (#{id,jdbcType=VARCHAR}, #{rankid,jdbcType=INTEGER}, #{rankname,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{appname,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mooc.mooc.model.RankInfo">
+    update rank_info
+    set rankid = #{rankid,jdbcType=INTEGER},
+      rankname = #{rankname,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      appname = #{appname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, rankid, rankname, updateTime, appname
+    from rank_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, rankid, rankname, updateTime, appname
+    from rank_info
+  </select>
+</mapper>
