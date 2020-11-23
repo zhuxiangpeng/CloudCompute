@@ -3,7 +3,9 @@ package com.mooc.mooc.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mooc.mooc.mapper.MusicInfoMapper;
+import com.mooc.mooc.mapper.RankInfoMapper;
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.BaiduService;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,6 +26,9 @@ public class BaiduServiceImpl implements BaiduService {
 
     @Resource
     private MusicInfoMapper musicInfoMapper;
+
+    @Resource
+    private RankInfoMapper rankInfoMapper;
 
     @Override
     public List<MusicInfo> getRankMusic(Integer rankid) throws Exception {
@@ -67,6 +72,23 @@ public class BaiduServiceImpl implements BaiduService {
             throw new Exception("调用api获取百度音乐" + rankid + "榜单下的音乐排行异常：", e);
         }
         return list;
+    }
+
+    @Override
+    public List<RankInfo> renovateRankList() {
+        List<RankInfo> list = rankInfoMapper.selectAll();
+        list = queryByApp(list);
+        return list;
+    }
+
+    private List<RankInfo> queryByApp(List<RankInfo> list) {
+        List<RankInfo> list1 = new ArrayList<>();
+        for(RankInfo rankInfo:list){
+            if(rankInfo.getAppname().equals("百度音乐")){
+                list1.add(rankInfo);
+            }
+        }
+        return list1;
     }
 
     private String inMusicList(String musicname, List<MusicInfo> list) {

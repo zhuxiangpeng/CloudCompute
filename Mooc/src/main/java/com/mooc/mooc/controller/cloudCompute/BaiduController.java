@@ -1,6 +1,7 @@
 package com.mooc.mooc.controller.cloudCompute;
 
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.BaiduService;
 import com.mooc.mooc.vo.ResultVO;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,24 @@ public class BaiduController {
         }
         resultVO.setCode(1);
         resultVO.setMsg("获取百度音乐" + rankid + "榜单下的音乐排行成功！");
+        resultVO.setData(list);
+        return resultVO;
+    }
+
+    /**
+     * 获取最新榜单列表
+     */
+    @RequestMapping("/renovateRankList")
+    public ResultVO renovateRankList() {
+        ResultVO resultVO = new ResultVO();
+        List<RankInfo> list = baiduService.renovateRankList();
+        if (list.size() == 0) {
+            resultVO.setCode(0);
+            resultVO.setMsg("获取到的百度音乐最新榜单为空！");
+            return resultVO;
+        }
+        resultVO.setCode(1);
+        resultVO.setMsg("获取百度音乐最新榜单成功！");
         resultVO.setData(list);
         return resultVO;
     }
