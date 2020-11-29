@@ -35,6 +35,8 @@ public class BaiduServiceImpl implements BaiduService {
     @Resource
     private MusicRankInfoMapper musicRankInfoMapper;
 
+    private static final int num = 500;
+
     @Override
     public List<MusicInfo> getRankMusic(Integer rankid) throws Exception {
         List<MusicInfo> list = new ArrayList<>();
@@ -76,12 +78,13 @@ public class BaiduServiceImpl implements BaiduService {
             e.printStackTrace();
             throw new Exception("调用api获取百度音乐" + rankid + "榜单下的音乐排行异常：", e);
         }
+        list = musicInfoMapper.selectByRankid(rankid);
         return list;
     }
 
     @Override
     public List<RankInfo> renovateRankList() {
-        List<RankInfo> list = rankInfoMapper.selectAll();
+        List<RankInfo> list = rankInfoMapper.selectByApp("百度音乐");
         list = queryByApp(list);
         return list;
     }
@@ -114,47 +117,47 @@ public class BaiduServiceImpl implements BaiduService {
         switch (musicRankInfo.getRankid()){
             case 23:
                 //情歌对唱榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 6:
                 //KTV热歌榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 20:
                 //华语金曲榜
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             case 9:
                 //雪碧音碰音榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 14:
                 //影视金曲榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 25:
                 //网络歌曲榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 22:
                 //经典老歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 1:
                 //新歌榜
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             case 21:
                 //欧美金曲榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 11:
                 //摇滚榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 2:
                 //热歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             default:
                 break;

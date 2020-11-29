@@ -46,6 +46,7 @@
     select musicid, musicname, remark, rankid, ranknum, updatetime, appname
     from music_info
     where rankid = #{rankid,jdbcType=INTEGER}
+    order by ranknum
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select musicid, musicname, remark, rankid, ranknum, updatetime, appname

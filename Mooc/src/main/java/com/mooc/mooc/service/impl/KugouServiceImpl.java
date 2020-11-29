@@ -35,6 +35,8 @@ public class KugouServiceImpl implements KugouService {
     @Resource
     private MusicRankInfoMapper musicRankInfoMapper;
 
+    private static final int num = 500;
+
     @Override
     public List<MusicInfo> getRankMusic(Integer rankid) throws Exception {
         List<MusicInfo> list = new ArrayList<>();
@@ -80,6 +82,7 @@ public class KugouServiceImpl implements KugouService {
             e.printStackTrace();
             throw new Exception("调用api获取酷狗音乐" + rankid + "榜单下的音乐排行异常：", e);
         }
+        list = musicInfoMapper.selectByRankid(rankid);
         return list;
     }
 
@@ -95,7 +98,7 @@ public class KugouServiceImpl implements KugouService {
     @Override
     public List<RankInfo> renovateRankList() throws IOException {
         List<RankInfo> list = new ArrayList<>();
-        list = rankInfoMapper.selectAll();
+        list = rankInfoMapper.selectByApp("酷狗音乐");
         String url = "https://bird.ioliu.cn/v1?url=http://m.kugou.com/rank/list?json=true";
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         try {
@@ -157,103 +160,103 @@ public class KugouServiceImpl implements KugouService {
         switch (musicRankInfo.getRankid()){
             case 31308:
                 //华语新歌榜
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             case 33166:
                 //欧美金曲榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 42808:
                 //台湾KKBOX风云榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 23784:
                 //网络红歌榜
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             case 4681:
                 //美国BillBoard榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 46868:
                 //日本SPACE SHOWER榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 31313:
                 //粤语新歌榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 33163:
                 //影视金曲榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 4673:
                 //日本公信榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 30972:
                 //腾讯音乐人原创榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 37361:
                 //酷狗雷达榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 22603:
                 //5sing音乐榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 31312:
                 //日本新歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 38623:
                 //韩国Melon音乐榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 24971:
                 //DJ热歌榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 42807:
                 //joox本地热歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 46910:
                 //综艺新歌榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 4680:
                 //英国单曲榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 44412:
                 //酷狗说唱榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 33161:
                 //国风新歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 6666:
                 //酷狗飙升榜
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             case 33162:
                 //ACG新歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 31310:
                 //欧美新歌榜
-                hotnum = 1*(100-ranknum);
+                hotnum = 1*(num-ranknum);
                 break;
             case 33160:
                 //电音热歌榜
-                hotnum = 2*(100-ranknum);
+                hotnum = 2*(num-ranknum);
                 break;
             case 8888:
                 //酷狗TOP500
-                hotnum = 3*(100-ranknum);
+                hotnum = 3*(num-ranknum);
                 break;
             default:
                 break;
