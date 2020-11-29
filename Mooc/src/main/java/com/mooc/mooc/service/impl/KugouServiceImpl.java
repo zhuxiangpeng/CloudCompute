@@ -3,8 +3,10 @@ package com.mooc.mooc.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mooc.mooc.mapper.MusicInfoMapper;
+import com.mooc.mooc.mapper.MusicRankInfoMapper;
 import com.mooc.mooc.mapper.RankInfoMapper;
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.MusicRankInfo;
 import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.KugouService;
 import org.apache.http.HttpResponse;
@@ -29,6 +31,9 @@ public class KugouServiceImpl implements KugouService {
 
     @Resource
     private MusicInfoMapper musicInfoMapper;
+
+    @Resource
+    private MusicRankInfoMapper musicRankInfoMapper;
 
     @Override
     public List<MusicInfo> getRankMusic(Integer rankid) throws Exception {
@@ -123,6 +128,146 @@ public class KugouServiceImpl implements KugouService {
             throw new IOException("调用api获取酷狗音乐最新榜单异常：", e);
         }
         return list;
+    }
+
+    @Override
+    public List<MusicRankInfo> getAllRank() {
+        musicRankInfoMapper.deleteByApp("酷狗音乐");
+        List<MusicInfo> musicList = musicInfoMapper.selectByApp("酷狗音乐");
+        List<RankInfo> rankList = rankInfoMapper.selectByApp("酷狗音乐");
+        for(MusicInfo musicInfo:musicList){
+            MusicRankInfo musicRankInfo = new MusicRankInfo();
+            String rankname = getRanknameByRankid(musicInfo, rankList);
+            musicRankInfo.setId(UUID.randomUUID().toString().replace("-", ""));
+            musicRankInfo.setMusicid(musicInfo.getMusicid());
+            musicRankInfo.setMusicname(musicInfo.getMusicname());
+            musicRankInfo.setAppname(musicInfo.getAppname());
+            musicRankInfo.setRankid(musicInfo.getRankid());
+            musicRankInfo.setRankname(rankname);
+            int hotnum = computeHotnum(musicRankInfo,musicInfo.getRanknum());
+            musicRankInfo.setHotnum(hotnum);
+            musicRankInfoMapper.insert(musicRankInfo);
+        }
+        List<MusicRankInfo> list = musicRankInfoMapper.selectByApp("酷狗音乐");
+        return list;
+    }
+
+    private int computeHotnum(MusicRankInfo musicRankInfo, Integer ranknum) {
+        int hotnum = 0;
+        switch (musicRankInfo.getRankid()){
+            case 31308:
+                //华语新歌榜
+                hotnum = 3*(100-ranknum);
+                break;
+            case 33166:
+                //欧美金曲榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 42808:
+                //台湾KKBOX风云榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 23784:
+                //网络红歌榜
+                hotnum = 3*(100-ranknum);
+                break;
+            case 4681:
+                //美国BillBoard榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 46868:
+                //日本SPACE SHOWER榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 31313:
+                //粤语新歌榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 33163:
+                //影视金曲榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 4673:
+                //日本公信榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 30972:
+                //腾讯音乐人原创榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 37361:
+                //酷狗雷达榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 22603:
+                //5sing音乐榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 31312:
+                //日本新歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 38623:
+                //韩国Melon音乐榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 24971:
+                //DJ热歌榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 42807:
+                //joox本地热歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 46910:
+                //综艺新歌榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 4680:
+                //英国单曲榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 44412:
+                //酷狗说唱榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 33161:
+                //国风新歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 6666:
+                //酷狗飙升榜
+                hotnum = 3*(100-ranknum);
+                break;
+            case 33162:
+                //ACG新歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 31310:
+                //欧美新歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 33160:
+                //电音热歌榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 8888:
+                //酷狗TOP500
+                hotnum = 3*(100-ranknum);
+                break;
+            default:
+                break;
+        }
+        return hotnum;
+    }
+
+    private String getRanknameByRankid(MusicInfo musicInfo, List<RankInfo> rankList) {
+        for(RankInfo rankInfo:rankList){
+            if(rankInfo.getRankid().equals(musicInfo.getRankid())){
+                return rankInfo.getRankname();
+            }
+        }
+        return "无榜名";
     }
 
     private String inRankList(Integer rankid, List<RankInfo> list) {

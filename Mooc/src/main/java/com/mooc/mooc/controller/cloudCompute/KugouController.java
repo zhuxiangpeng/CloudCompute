@@ -1,6 +1,7 @@
 package com.mooc.mooc.controller.cloudCompute;
 
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.MusicRankInfo;
 import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.KugouService;
 import com.mooc.mooc.vo.ResultVO;
@@ -68,6 +69,24 @@ public class KugouController {
         }
         resultVO.setCode(1);
         resultVO.setMsg("获取酷狗音乐最新榜单成功！");
+        resultVO.setData(list);
+        return resultVO;
+    }
+
+    /**
+     * 获取热度总榜单列表
+     */
+    @RequestMapping("/getAllRank")
+    public ResultVO getAllRank() {
+        ResultVO resultVO = new ResultVO();
+        List<MusicRankInfo> list = kugouService.getAllRank();
+        if (list.size() == 0) {
+            resultVO.setCode(0);
+            resultVO.setMsg("获取到的酷狗音乐热度总榜单为空！");
+            return resultVO;
+        }
+        resultVO.setCode(1);
+        resultVO.setMsg("获取酷狗音乐热度总榜单成功！");
         resultVO.setData(list);
         return resultVO;
     }

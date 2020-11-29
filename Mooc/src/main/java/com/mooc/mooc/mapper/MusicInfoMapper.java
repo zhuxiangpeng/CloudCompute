@@ -15,4 +15,6 @@ public interface MusicInfoMapper {
     List<MusicInfo> selectByRankid(Integer rankid);
 
     int updateByPrimaryKey(MusicInfo record);
+
+    List<MusicInfo> selectByApp(String appname);
 }

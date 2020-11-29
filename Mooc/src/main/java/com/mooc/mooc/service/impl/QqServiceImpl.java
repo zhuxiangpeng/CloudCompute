@@ -3,8 +3,10 @@ package com.mooc.mooc.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mooc.mooc.mapper.MusicInfoMapper;
+import com.mooc.mooc.mapper.MusicRankInfoMapper;
 import com.mooc.mooc.mapper.RankInfoMapper;
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.MusicRankInfo;
 import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.QqService;
 import org.apache.http.HttpResponse;
@@ -30,6 +32,9 @@ public class QqServiceImpl implements QqService {
 
     @Resource
     private MusicInfoMapper musicInfoMapper;
+
+    @Resource
+    private MusicRankInfoMapper musicRankInfoMapper;
 
     @Override
     public List<MusicInfo> getRankMusic(Integer rankid) throws Exception {
@@ -120,6 +125,154 @@ public class QqServiceImpl implements QqService {
             throw new IOException("调用api获取QQ音乐最新榜单异常：", e);
         }
         return list;
+    }
+
+    @Override
+    public List<MusicRankInfo> getAllRank() {
+        musicRankInfoMapper.deleteByApp("QQ音乐");
+        List<MusicInfo> musicList = musicInfoMapper.selectByApp("QQ音乐");
+        List<RankInfo> rankList = rankInfoMapper.selectByApp("QQ音乐");
+        for(MusicInfo musicInfo:musicList){
+            MusicRankInfo musicRankInfo = new MusicRankInfo();
+            String rankname = getRanknameByRankid(musicInfo, rankList);
+            musicRankInfo.setId(UUID.randomUUID().toString().replace("-", ""));
+            musicRankInfo.setMusicid(musicInfo.getMusicid());
+            musicRankInfo.setMusicname(musicInfo.getMusicname());
+            musicRankInfo.setAppname(musicInfo.getAppname());
+            musicRankInfo.setRankid(musicInfo.getRankid());
+            musicRankInfo.setRankname(rankname);
+            int hotnum = computeHotnum(musicRankInfo,musicInfo.getRanknum());
+            musicRankInfo.setHotnum(hotnum);
+            musicRankInfoMapper.insert(musicRankInfo);
+        }
+        List<MusicRankInfo> list = musicRankInfoMapper.selectByApp("QQ音乐");
+        return list;
+    }
+
+    private int computeHotnum(MusicRankInfo musicRankInfo, Integer ranknum) {
+        int hotnum = 0;
+        switch (musicRankInfo.getRankid()){
+            case 17:
+                //巅峰榜·日本
+                hotnum = 1*(100-ranknum);
+                break;
+            case 58:
+                //说唱榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 27:
+                //巅峰榜·新歌
+                hotnum = 3*(100-ranknum);
+                break;
+            case 36:
+                //巅峰榜·K歌金曲
+                hotnum = 3*(100-ranknum);
+                break;
+            case 5:
+                //巅峰榜·内地
+                hotnum = 2*(100-ranknum);
+                break;
+            case 26:
+                //巅峰榜·热歌
+                hotnum = 1*(100-ranknum);
+                break;
+            case 65:
+                //国风热歌榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 62:
+                //飙升榜
+                hotnum = 3*(100-ranknum);
+                break;
+            case 4:
+                //巅峰榜·流行指数
+                hotnum = 3*(100-ranknum);
+                break;
+            case 16:
+                //巅峰榜·韩国
+                hotnum = 1*(100-ranknum);
+                break;
+            case 64:
+                //综艺新歌榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 67:
+                //听歌识曲榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 61:
+                //台湾地区榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 60:
+                //抖音排行榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 52:
+                //巅峰榜·腾讯音乐人原创榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 74:
+                //Q音快手榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 75:
+                //有声榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 59:
+                //香港地区榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 63:
+                //DJ舞曲榜
+                hotnum = 2*(100-ranknum);
+                break;
+            case 28:
+                //巅峰榜·网络歌曲
+                hotnum = 1*(100-ranknum);
+                break;
+            case 3:
+                //巅峰榜·欧美
+                hotnum = 1*(100-ranknum);
+                break;
+            case 57:
+                //电音榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 29:
+                //巅峰榜·影视金曲
+                hotnum = 2*(100-ranknum);
+                break;
+            case 70:
+                //达人音乐榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 72:
+                //动漫音乐榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 73:
+                //游戏音乐榜
+                hotnum = 1*(100-ranknum);
+                break;
+            case 201:
+                //巅峰榜·MV
+                hotnum = 1*(100-ranknum);
+                break;
+            default:
+                break;
+        }
+        return hotnum;
+    }
+
+    private String getRanknameByRankid(MusicInfo musicInfo, List<RankInfo> rankList) {
+        for(RankInfo rankInfo:rankList){
+            if(rankInfo.getRankid().equals(musicInfo.getRankid())){
+                return rankInfo.getRankname();
+            }
+        }
+        return "无榜名";
     }
 
     private String inRankList(Integer rankid, List<RankInfo> list) {

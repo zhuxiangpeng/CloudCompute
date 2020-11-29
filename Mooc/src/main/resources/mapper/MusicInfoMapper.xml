@@ -37,6 +37,11 @@
     from music_info
     where musicid = #{musicid,jdbcType=VARCHAR}
   </select>
+  <select id="selectByApp" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select musicid, musicname, remark, rankid, ranknum, updatetime, appname
+    from music_info
+    where appname = #{appname,jdbcType=VARCHAR}
+  </select>
   <select id="selectByRankid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select musicid, musicname, remark, rankid, ranknum, updatetime, appname
     from music_info

@@ -40,6 +40,6 @@
          
 		 <!-- 生成对应的表及类名 -->
 <!--         <table tableName="music_info" domainObjectName="MusicInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
-         <table tableName="rank_info" domainObjectName="RankInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+         <table tableName="music_rank_info" domainObjectName="MusicRankInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
      </context>
  </generatorConfiguration>

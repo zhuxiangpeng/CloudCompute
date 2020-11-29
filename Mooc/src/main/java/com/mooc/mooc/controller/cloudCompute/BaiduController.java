@@ -1,6 +1,7 @@
 package com.mooc.mooc.controller.cloudCompute;
 
 import com.mooc.mooc.model.MusicInfo;
+import com.mooc.mooc.model.MusicRankInfo;
 import com.mooc.mooc.model.RankInfo;
 import com.mooc.mooc.service.BaiduService;
 import com.mooc.mooc.vo.ResultVO;
@@ -59,6 +60,24 @@ public class BaiduController {
         }
         resultVO.setCode(1);
         resultVO.setMsg("获取百度音乐最新榜单成功！");
+        resultVO.setData(list);
+        return resultVO;
+    }
+
+    /**
+     * 获取热度总榜单列表
+     */
+    @RequestMapping("/getAllRank")
+    public ResultVO getAllRank() {
+        ResultVO resultVO = new ResultVO();
+        List<MusicRankInfo> list = baiduService.getAllRank();
+        if (list.size() == 0) {
+            resultVO.setCode(0);
+            resultVO.setMsg("获取到的百度音乐热度总榜单为空！");
+            return resultVO;
+        }
+        resultVO.setCode(1);
+        resultVO.setMsg("获取百度音乐热度总榜单成功！");
         resultVO.setData(list);
         return resultVO;
     }

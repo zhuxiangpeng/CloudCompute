@@ -13,4 +13,6 @@ public interface RankInfoMapper {
     List<RankInfo> selectAll();
 
     int updateByPrimaryKey(RankInfo record);
+
+    List<RankInfo> selectByApp(String appname);
 }
