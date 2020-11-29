@@ -1,0 +1,20 @@
+.musicList {
+
+  border: 1px solid gray;
+  margin: 0 10px;
+  margin-top: 30px;
+
+}
+
+.listHeader {
+  text-align: center;
+  background-color: #e3ffff;
+  padding: 10px;
+}
+
+.ant-tabs-content {
+  overflow: scroll;
+}
+.ant-tabs-content-holder {
+  overflow: scroll;
+}
